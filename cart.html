@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keranjang Belanja - SnaxSnack</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="icon" href="IMG/Logo SnaxSnack square PNG.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="sticky-header">
+      <div class="container">
+        <div class="logo-container">
+          <h1 class="logo">Snax<span>Snack</span></h1>
+          <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+        <nav id="nav">
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="index.html#produk">Produk</a></li>
+            <!--             <li><a href="index.html#testimoni">Testimoni</a></li> -->
+            <li><a href="index.html#tentang">Tentang Kami</a></li>
+            <li><a href="index.html#kontak">Kontak</a></li>
+            <li class="cart-icon">
+              <a href="cart.html"
+                ><i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span></a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="cart-section">
+      <div class="container">
+        <h2>Keranjang Belanja</h2>
+
+        <div class="cart-empty" id="cart-empty">
+          <i class="fas fa-shopping-cart"></i>
+          <p>Keranjang belanja Anda kosong</p>
+          <a href="index.html#produk" class="cta-button">Lihat Produk</a>
+        </div>
+
+        <div class="cart-items" id="cart-items">
+          <table>
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th>Ukuran</th>
+                <th>Harga</th>
+                <th>Jumlah</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cart-table-body">
+              <!-- Cart items will be inserted here by JavaScript -->
+            </tbody>
+          </table>
+
+          <div class="cart-summary">
+            <div class="summary-details">
+              <h3>Ringkasan Belanja</h3>
+              <div class="summary-row">
+                <span>Total Harga</span>
+                <span id="total-price">Rp 0</span>
+              </div>
+              <div class="summary-row" id="discount-row" style="display: none">
+                <span>Diskon</span>
+                <span id="discount-amount">-</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total Pembayaran</span>
+                <span id="grand-total">Rp 0</span>
+              </div>
+            </div>
+
+            <form id="checkout-form" action="send_order.php" method="POST">
+              <input type="hidden" name="cart_data" id="cart-data-input" />
+              <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-group">
+                <label for="phone">Nomor WhatsApp</label>
+                <input type="tel" id="phone" name="phone" required />
+              </div>
+              <div class="form-group">
+                <label for="address">Alamat Lengkap</label>
+                <textarea
+                  id="address"
+                  name="address"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="notes">Catatan (Opsional)</label>
+                <textarea id="notes" name="notes" rows="2"></textarea>
+              </div>
+              <button type="submit" class="checkout-button">
+                Pesan Sekarang
+              </button>
+            </form>
+            <div class="form-group" style="margin-top: 30px">
+              <div style="display: flex; gap: 10px">
+                <input
+                  type="text"
+                  id="redeem-code"
+                  placeholder="Masukkan kode promo"
+                />
+                <button type="button" class="cta-button" id="apply-redeem">
+                  Terapkan
+                </button>
+              </div>
+              <p
+                id="redeem-message"
+                style="margin-top: 10px; font-size: 0.9rem; color: green"
+              ></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="whatsapp-float">
+      <a href="https://wa.me/6281295536876" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

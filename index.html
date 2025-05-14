@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SnaxSnack - Snack Premium dengan Rasa Autentik</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="icon" href="IMG/Logo SnaxSnack square PNG.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="sticky-header">
+      <div class="container">
+        <div class="logo-container">
+          <img
+            class="logo"
+            src="IMG/SnaxSnack Logo PNG.png"
+            alt="Logo SnaxSnack"
+          />
+          <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
+        <nav id="nav">
+          <ul>
+            <li><a href="index.html" class="active">Beranda</a></li>
+            <li><a href="#produk">Produk</a></li>
+            <!--             <li><a href="#testimoni">Testimoni</a></li> -->
+            <li><a href="#tentang">Tentang Kami</a></li>
+            <li><a href="#kontak">Kontak</a></li>
+            <li class="cart-icon">
+              <a href="cart.html"
+                ><i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span></a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section id="beranda" class="hero scroll-fade-up">
+      <div class="hero-content">
+        <h2>Snack Premium dengan Rasa Autentik</h2>
+        <p>
+          Dibuat dengan bahan pilihan dan rempah berkualitas untuk pengalaman
+          ngemil yang tak terlupakan
+        </p>
+        <a href="#produk" class="cta-button">Lihat Produk</a>
+      </div>
+      <div class="hero-image">
+        <img
+          src="IMG/SnaxSnack Logo Black PNG.png"
+          loading="lazy"
+          alt="Snack SnaxSnack"
+        />
+      </div>
+    </section>
+
+    <section class="stats scroll-fade-up">
+      <div class="container">
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <h3>100+</h3>
+          <p>Pelanggan</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-box-open"></i>
+          <h3>5+</h3>
+          <p>Varian Snack</p>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>50+</h3>
+          <p>Kota Terjangkau</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="produk" class="produk scroll-fade-up">
+      <div class="container">
+        <div class="section-header">
+          <h2>Produk Kami</h2>
+          <p>Pilihan snacking terbaik untuk setiap momen</p>
+        </div>
+        <div class="produk-grid">
+          <!-- Basreng Pedas -->
+          <div class="produk-item">
+            <img
+              class="produk-img"
+              src="IMG/bp2.jpg"
+              alt="IMG"
+              loading="lazy"
+            />
+            <h3>Basreng Pedas</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Basreng Pedas">
+                <option value="40gr">40gr - Rp 4.000</option>
+                <option value="150gr">150gr - Rp 12.000</option>
+                <option value="300gr">300gr - Rp 20.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(20)</span>
+            </div>
+            <button class="add-to-cart" data-product="Basreng Pedas">
+              + Keranjang
+            </button>
+          </div>
+
+          <!-- Basreng Asin -->
+          <div class="produk-item">
+            <img
+              class="produk-img"
+              src="IMG/bp1.jpg"
+              alt="IMG"
+              loading="lazy"
+            />
+            <h3>Basreng Asin</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Basreng Asin">
+                <option value="40gr">40gr - Rp 4.000</option>
+                <option value="150gr">150gr - Rp 12.000</option>
+                <option value="300gr">300gr - Rp 20.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(13)</span>
+            </div>
+            <button class="add-to-cart" data-product="Basreng Asin">
+              + Keranjang
+            </button>
+          </div>
+
+          <!-- Makaroni Pedas -->
+          <div class="produk-item">
+            <img
+              class="produk-img"
+              src="IMG/mp3.jpg"
+              alt="IMG"
+              loading="lazy"
+            />
+            <h3>Makaroni Pedas</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Makaroni Pedas">
+                <option value="40gr">40gr - Rp 3.000</option>
+                <option value="150gr">150gr - Rp 10.000</option>
+                <option value="300gr">300gr - Rp 18.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(18)</span>
+            </div>
+            <button class="add-to-cart" data-product="Makaroni Pedas">
+              + Keranjang
+            </button>
+          </div>
+
+          <!-- Makaroni BBQ -->
+          <!--           <div class="produk-item">
+            <div
+              class="produk-img"
+              style="
+                background-image: url('https://via.placeholder.com/300x187.5/FFD700/A86523?text=Makaroni+BBQ');
+              "
+            ></div>
+            <h3>Makaroni BBQ</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Makaroni BBQ">
+                <option value="40gr">40gr - Rp 3.000</option>
+                <option value="150gr">150gr - Rp 10.000</option>
+                <option value="300gr">300gr - Rp 18.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(112)</span>
+            </div>
+            <button class="add-to-cart" data-product="Makaroni BBQ">
+              + Keranjang
+            </button>
+          </div> -->
+
+          <!-- Makaroni Asin -->
+          <div class="produk-item">
+            <img
+              class="produk-img"
+              src="IMG/mp3.jpg"
+              alt="IMG"
+              loading="lazy"
+            />
+            <h3>Makaroni Asin</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Makaroni Asin">
+                <option value="40gr">40gr - Rp 3.000</option>
+                <option value="150gr">150gr - Rp 10.000</option>
+                <option value="300gr">300gr - Rp 18.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span>(5)</span>
+            </div>
+            <button class="add-to-cart" data-product="Makaroni Asin">
+              + Keranjang
+            </button>
+          </div>
+
+          <!-- Usus Ayam -->
+          <div class="produk-item">
+            <img class="produk-img" src="IMG/u6.jpg" alt="IMG" loading="lazy" />
+            <h3>Usus Ayam</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Usus Ayam">
+                <option value="40gr">40gr - Rp 5.000</option>
+                <option value="150gr">150gr - Rp 14.000</option>
+                <option value="300gr">300gr - Rp 25.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <span>(28)</span>
+            </div>
+            <button class="add-to-cart" data-product="Usus Ayam">
+              + Keranjang
+            </button>
+          </div>
+
+          <!-- Kerupuk Ikan Tongkol -->
+          <div class="produk-item">
+            <img
+              class="produk-img"
+              src="IMG/kit2.jpg"
+              alt="IMG"
+              loading="lazy"
+            />
+            <h3>Kerupuk Ikan Tongkol</h3>
+            <div class="size-selector">
+              <select class="size-option" data-product="Kerupuk Ikan Tongkol">
+                <option value="150gr">150gr - Rp 10.000</option>
+                <option value="300gr">300gr - Rp 18.000</option>
+                <option value="500gr">500gr - Rp 28.000</option>
+              </select>
+            </div>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+              <span>(17)</span>
+            </div>
+            <button class="add-to-cart" data-product="Kerupuk Ikan Tongkol">
+              + Keranjang
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <section id="testimoni" class="testimoni">
+      <div class="container">
+        <div class="section-header">
+          <h2>Apa Kata Pelanggan Kami?</h2>
+          <p>Testimoni dari mereka yang sudah mencoba SnaxSnack</p>
+        </div>
+        <div class="testimoni-slider">
+          <div class="testimoni-item">
+            <div class="quote"><i class="fas fa-quote-left"></i></div>
+            <p>
+              "Basreng pedasnya bikin nagih! Rasanya autentik dan teksturnya
+              pas, tidak terlalu keras. Sudah pesan berkali-kali!"
+            </p>
+            <div class="user">
+              <img
+                src="https://randomuser.me/api/portraits/women/32.jpg"
+                alt="Pelanggan"
+              />
+              <div>
+                <h4>Sarah Wijaya</h4>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testimoni-item">
+            <div class="quote"><i class="fas fa-quote-left"></i></div>
+            <p>
+              "Pengiriman cepat dan packing rapi. Makaroni BBQ favorit anak-anak
+              saya. Harganya juga sangat terjangkau untuk kualitas premium."
+            </p>
+            <div class="user">
+              <img
+                src="https://randomuser.me/api/portraits/men/45.jpg"
+                alt="Pelanggan"
+              />
+              <div>
+                <h4>Budi Santoso</h4>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testimoni-item">
+            <div class="quote"><i class="fas fa-quote-left"></i></div>
+            <p>
+              "Usus ayamnya crispy dan gurih banget! Cocok untuk teman nongkrong
+              atau kerja lembur. Recommended!"
+            </p>
+            <div class="user">
+              <img
+                src="https://randomuser.me/api/portraits/women/68.jpg"
+                alt="Pelanggan"
+              />
+              <div>
+                <h4>Dewi Lestari</h4>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <section id="tentang" class="tentang">
+      <div class="container">
+        <div class="tentang-content">
+          <h2>Tentang SnaxSnack</h2>
+          <p>
+            SnaxSnack dimulai dari kecintaan kami terhadap camilan berkualitas
+            dengan harga terjangkau. Dengan bahan-bahan pilihan dan proses
+            produksi yang higienis, kami berkomitmen untuk memberikan pengalaman
+            ngemil terbaik bagi pelanggan.
+          </p>
+          <p>
+            Setiap produk kami dibuat dengan tangan-tangan terampil dan melalui
+            kontrol kualitas yang ketat untuk memastikan cita rasa yang
+            konsisten dan kualitas terbaik.
+          </p>
+          <div class="keunggulan">
+            <div class="keunggulan-item">
+              <i class="fas fa-check-circle"></i>
+              <span>100% Halal</span>
+            </div>
+            <div class="keunggulan-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Tanpa Pengawet</span>
+            </div>
+            <div class="keunggulan-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Packing Higienis</span>
+            </div>
+          </div>
+        </div>
+        <div class="tentang-image">
+          <img
+            src="IMG/SnaxSnack Logo Black PNG.png"
+            alt="Proses Produksi SnaxSnack"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section id="kontak" class="kontak">
+      <div class="container">
+        <div class="kontak-info">
+          <h2>Hubungi Kami</h2>
+          <p>Kami siap membantu Anda 7 hari seminggu</p>
+          <div class="kontak-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <h4>Telepon/WhatsApp</h4>
+              <p><a href="https://wa.me/6281295536876">+62 812-9553-6876</a></p>
+            </div>
+          </div>
+          <div class="kontak-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4>Email</h4>
+              <p>
+                <a href="mailto:snaxsnack@example.com"
+                  >snaxsnackofficial@gmail.com</a
+                >
+              </p>
+            </div>
+          </div>
+          <div class="kontak-item">
+            <i class="fab fa-instagram"></i>
+            <div>
+              <h4>Instagram</h4>
+              <p>
+                <a href="https://instagram.com/snaxsnack.id" target="_blank"
+                  >@snaxsnack.id</a
+                >
+              </p>
+            </div>
+          </div>
+          <div class="kontak-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4>Alamat</h4>
+              <p>Jl. Haryo Panular No. 2, Surakarta</p>
+            </div>
+          </div>
+        </div>
+        <div class="kontak-form">
+          <h3>Kirim Pesan</h3>
+          <!-- Ganti form kontak di bagian kontak dengan ini -->
+          <form id="contact-form" class="contact-form">
+            <div class="form-group">
+              <input
+                type="text"
+                id="contact-name"
+                placeholder="Nama Anda"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                id="contact-email"
+                placeholder="Email Anda"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input type="text" id="contact-subject" placeholder="Subjek" />
+            </div>
+            <div class="form-group">
+              <textarea
+                id="contact-message"
+                placeholder="Pesan Anda"
+                rows="5"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="submit-button">Kirim Pesan</button>
+            <div id="form-status" class="form-status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h3 class="logo">Snax<span>Snack</span></h3>
+            <p>
+              Snack premium dengan cita rasa autentik untuk menemani momen
+              spesial Anda.
+            </p>
+            <div class="social-media">
+              <a href="https://www.facebook.com/" target="_blank"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="https://www.instagram.com/snaxsnack.id" target="_blank"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="https://wa.me/6281295536876" target="_blank"
+                ><i class="fab fa-whatsapp"></i
+              ></a>
+              <a href="https://www.tiktok.com/" target="_blank"
+                ><i class="fab fa-tiktok"></i
+              ></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Produk</h3>
+            <ul>
+              <li><a href="index.html#produk">Basreng</a></li>
+              <li><a href="index.html#produk">Makaroni</a></li>
+              <li><a href="index.html#produk">Usus Ayam</a></li>
+              <li><a href="index.html#produk">Kerupuk Ikan</a></li>
+              <li><a href="index.html#produk">Paket Kombo</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Perusahaan</h3>
+            <ul>
+              <li><a href="index.html#tentang">Tentang Kami</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Karir</a></li>
+              <li><a href="#">Kebijakan Privasi</a></li>
+              <li><a href="#">Syarat & Ketentuan</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3>Bantuan</h3>
+            <ul>
+              <li><a href="#">Cara Memesan</a></li>
+              <li><a href="cart.html">Pembayaran</a></li>
+              <li><a href="#">Pengiriman</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li>
+                <a href="https://wa.me/6281295536876" target="_blank"
+                  >Hubungi Kami</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 SnaxSnack. All rights reserved.</p>
+          <div class="payment-methods">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fas fa-money-bill-wave"></i>
+            <i class="fas fa-qrcode"></i>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="whatsapp-float">
+      <a href="https://wa.me/6281295536876" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
