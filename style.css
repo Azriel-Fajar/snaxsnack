@@ -1125,6 +1125,10 @@ footer {
   transform: translateY(0);
 }
 
+.cart-icon.mobile-cart {
+  display: none;
+}
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
   /* Adjustments for large tablets and small laptops */
@@ -1236,6 +1240,14 @@ footer {
 
   .cart-section {
     padding: 120px 0 60px;
+  }
+
+  .cart-icon.mobile-cart {
+    display: block;
+  }
+
+  .cart-icon.desktop-cart {
+    display: none;
   }
 }
 
