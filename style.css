@@ -1129,6 +1129,10 @@ footer {
   display: none;
 }
 
+.cart-icon.mobile-cart a {
+  color: var(--black);
+}
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
   /* Adjustments for large tablets and small laptops */
