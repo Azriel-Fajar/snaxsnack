@@ -14,36 +14,50 @@
 
   <body>
     <header class="sticky-header">
-      <div class="container">
-        <div class="logo-container">
-          <img
-            class="logo"
-            src="IMG/SnaxSnack Logo PNG.png"
-            alt="Logo SnaxSnack"
-          />
-          <div class="hamburger" id="hamburger">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-          </div>
-        </div>
-        <nav id="nav">
-          <ul>
-            <li><a href="index.html" class="active">Beranda</a></li>
-            <li><a href="#produk">Produk</a></li>
-            <!--             <li><a href="#testimoni">Testimoni</a></li> -->
-            <li><a href="#tentang">Tentang Kami</a></li>
-            <li><a href="#kontak">Kontak</a></li>
-            <li class="cart-icon">
-              <a href="cart.html"
-                ><i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">0</span></a
-              >
-            </li>
-          </ul>
-        </nav>
+  <div class="container">
+    <div class="logo-container">
+      <!-- Logo -->
+      <img
+        class="logo"
+        src="IMG/SnaxSnack Logo PNG.png"
+        alt="Logo SnaxSnack"
+      />
+
+      <!-- Tombol Hamburger -->
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
       </div>
-    </header>
+
+      <!-- Ikon Keranjang di Mobile -->
+      <div class="cart-icon mobile-cart">
+        <a href="cart.html">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigasi -->
+    <nav id="nav">
+      <ul>
+        <li><a href="index.html" class="active">Beranda</a></li>
+        <li><a href="#produk">Produk</a></li>
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+        <!-- Hapus cart dari sini karena kita pindah ke atas -->
+        <li class="cart-icon desktop-cart">
+          <a href="cart.html">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
 
     <section id="beranda" class="hero scroll-fade-up">
       <div class="hero-content">
