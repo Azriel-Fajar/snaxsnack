@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Global state untuk diskon
   let appliedDiscount =
     parseInt(localStorage.getItem("snaxsnack_discount")) || 0;
-  const validRedeemCode = "DISKON10";
+  const validRedeemCode = "SNACK10";
   const discountPercentage = 10;
 
   // Redeem code handler
