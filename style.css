@@ -337,6 +337,32 @@ img.produk-img {
   background-color: var(--orange-dark);
 }
 
+.produk-package-divider {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin: 30px 0;
+  position: relative;
+}
+
+.produk-package-divider:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--gray-light);
+  z-index: -1;
+}
+
+.produk-package-divider span {
+  background-color: var(--cream);
+  padding: 0 20px;
+  color: var(--brown);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
 /* Testimoni Section */
 .testimoni {
   padding: 100px 0;
@@ -1133,6 +1159,169 @@ footer {
   color: var(--black);
 }
 
+/* Package Modal Styles */
+.package-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.package-modal .modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+.package-modal h3 {
+  margin-bottom: 20px;
+  color: var(--brown);
+}
+
+.package-options {
+  margin-bottom: 20px;
+}
+
+.option-group {
+  margin-bottom: 15px;
+}
+
+.option-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.option-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--gray-light);
+  border-radius: 5px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.modal-buttons .cancel-package {
+  background-color: var(--gray-light);
+  border: none;
+}
+
+.modal-buttons .confirm-package {
+  background-color: var(--orange);
+  color: white;
+  border: none;
+}
+
+/* Package indicator in cart */
+.package-badge {
+  display: inline-block;
+  background-color: var(--orange);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+
+.package-contents {
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-top: 3px;
+}
+
+.original-price-text {
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-top: 3px;
+  text-decoration: line-through;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Package items styling */
+.produk-item[data-is-package="true"] {
+  position: relative;
+  border: 2px solid var(--orange);
+}
+
+.produk-item[data-is-package="true"]:before {
+  content: "PAKET HEMAT";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--orange);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+/* Price styling for packages */
+.original-price {
+  text-decoration: line-through;
+  color: var(--gray);
+  font-size: 0.9em;
+  margin-right: 5px;
+}
+
+.discounted-price {
+  color: var(--orange);
+  font-weight: bold;
+}
+
+.savings-badge {
+  background-color: #e3f7e8;
+  color: #2e7d32;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  display: inline-block;
+  margin: 5px 20px 10px;
+}
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
   /* Adjustments for large tablets and small laptops */
@@ -1221,7 +1410,7 @@ footer {
     margin: 0;
     width: 100%;
   }
-  
+
   nav ul li a {
     display: flex;
     justify-content: center;
