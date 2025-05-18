@@ -13,6 +13,10 @@ document.addEventListener("click", function (e) {
   }
 });
 
+// Global variables
+let cart = JSON.parse(localStorage.getItem("snaxsnack_cart")) || [];
+let appliedDiscount = parseInt(localStorage.getItem("snaxsnack_discount")) || 0;
+
 document.addEventListener("DOMContentLoaded", function () {
   // Mobile Menu Toggle
   const hamburger = document.getElementById("hamburger");
@@ -62,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Cart Functionality
-  let cart = JSON.parse(localStorage.getItem("snaxsnack_cart")) || [];
   const cartCountElements = document.querySelectorAll(".cart-count");
 
   // Update cart count
@@ -71,63 +74,184 @@ document.addEventListener("DOMContentLoaded", function () {
     cartCountElements.forEach((el) => (el.textContent = totalItems));
   }
 
+  // Fungsi untuk menampilkan efek checklist
+  function showAddToCartFeedback(button) {
+    const originalText = button.textContent;
+    button.textContent = "✓ Ditambahkan";
+    button.style.backgroundColor = "#4CAF50";
+
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.backgroundColor = "var(--orange)";
+    }, 1500);
+  }
+
+  // Fungsi untuk menampilkan modal pilihan paket
+  function showPackageOptions(button, productName, size, price, priceText) {
+    const options = JSON.parse(button.getAttribute("data-options"));
+
+    // Special case for Paket Huhah - no flavor selection needed
+    if (productName === "Paket Huhah") {
+      addToCart(productName, size, price, priceText, true, options);
+      showAddToCartFeedback(button);
+      return;
+    }
+
+    // Rest of the modal code remains the same for other packages
+    const modal = document.createElement("div");
+    modal.className = "package-modal";
+    modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Pilih Varian untuk ${productName}</h3>
+      <div class="package-options">
+        ${options
+          .map((option) => {
+            if (option.includes("Basreng") || option.includes("Makaroni")) {
+              return `
+              <div class="option-group">
+                <label>${option}:</label>
+                <select class="flavor-select" data-product="${option}">
+                  <option value="${option} Pedas">Pedas</option>
+                  <option value="${option} Asin">Asin</option>
+                </select>
+              </div>
+            `;
+            }
+            return `<div class="option-item">${option}</div>`;
+          })
+          .join("")}
+      </div>
+      <div class="modal-buttons">
+        <button class="cancel-package">Batal</button>
+        <button class="confirm-package">Tambahkan ke Keranjang</button>
+      </div>
+    </div>
+  `;
+
+    document.body.appendChild(modal);
+
+    modal.querySelector(".cancel-package").addEventListener("click", () => {
+      modal.remove();
+    });
+
+    modal.querySelector(".confirm-package").addEventListener("click", () => {
+      const selectedFlavors = Array.from(
+        modal.querySelectorAll(".flavor-select")
+      ).map((select) => select.value);
+      const packageItems = options.map((option) => {
+        if (option.includes("Basreng") || option.includes("Makaroni")) {
+          const select = modal.querySelector(
+            `select[data-product="${option}"]`
+          );
+          return select ? select.value : `${option} Pedas`;
+        }
+        return option;
+      });
+
+      addToCart(productName, size, price, priceText, true, packageItems);
+      modal.remove();
+      showAddToCartFeedback(button);
+    });
+  }
+
+  // Fungsi untuk menambahkan ke keranjang
+  function addToCart(
+    productName,
+    size,
+    price,
+    priceText,
+    isPackage = false,
+    packageItems = []
+  ) {
+    // Generate unique ID untuk item keranjang
+    const itemId = `${productName.replace(/\s+/g, "-")}-${size.replace(
+      /\s+/g,
+      "-"
+    )}`.toLowerCase();
+
+    // Cek apakah item sudah ada di keranjang
+    const existingItem = cart.find((item) => item.id === itemId);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: itemId,
+        product: productName,
+        size: size,
+        price: price,
+        quantity: 1,
+        priceText: priceText,
+        isPackage: isPackage,
+        packageItems: packageItems,
+        originalPrice: isPackage
+          ? getOriginalPackagePrice(productName, size)
+          : price,
+      });
+    }
+
+    // Simpan ke localStorage
+    localStorage.setItem("snaxsnack_cart", JSON.stringify(cart));
+    updateCartCount();
+  }
+
+  // Fungsi untuk mendapatkan harga asli paket
+  function getOriginalPackagePrice(packageName, size) {
+    const packagePrices = {
+      "Paket Kakap": { M: 54000, L: 91000 },
+      "Paket Cihuy": { M: 32000, L: 53000 },
+      "Paket Huhah": { M: 22000, L: 38000 },
+      "Paket Gacor": { M: 26000, L: 45000 },
+    };
+
+    return packagePrices[packageName][size];
+  }
+
   // Add to cart functionality
   document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
       const productName = this.getAttribute("data-product");
+      const isPackage = this.getAttribute("data-is-package") === "true";
       const sizeSelect = this.parentElement.querySelector(".size-option");
       const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
       const size = selectedOption.value;
-      const sizeText = selectedOption.text.split(" - ")[0];
-      const priceText = selectedOption.text.split(" - ")[1];
+
+      // Extract the discounted price (last price in the option text)
+      const priceText = selectedOption.textContent.split("Rp ").pop().trim();
       const price = parseInt(priceText.replace(/[^\d]/g, ""));
 
-      // Generate unique ID for cart item
-      const itemId = `${productName.replace(/\s+/g, "-")}-${size.replace(
-        /\s+/g,
-        "-"
-      )}`.toLowerCase();
-
-      // Check if item already exists in cart
-      const existingItem = cart.find((item) => item.id === itemId);
-
-      if (existingItem) {
-        existingItem.quantity += 1;
+      if (isPackage) {
+        // Tampilkan modal pilihan untuk paket
+        showPackageOptions(this, productName, size, price, priceText);
       } else {
-        cart.push({
-          id: itemId,
-          product: productName,
-          size: size,
-          sizeText: sizeText,
-          price: price,
-          quantity: 1,
-          priceText: priceText,
-        });
+        // Produk biasa langsung ditambahkan
+        const sizeText = selectedOption.text.split(" - ")[0];
+        addToCart(productName, size, price, priceText, false, []);
+        showAddToCartFeedback(this);
       }
-
-      // Save to localStorage
-      localStorage.setItem("snaxsnack_cart", JSON.stringify(cart));
-
-      // Update cart count
-      updateCartCount();
-
-      // Show added feedback
-      const originalText = this.textContent;
-      this.textContent = "✓ Ditambahkan";
-      this.style.backgroundColor = "#4CAF50";
-
-      setTimeout(() => {
-        this.textContent = originalText;
-        this.style.backgroundColor = "var(--orange)";
-      }, 1500);
     });
   });
 
   // Calculate total price of items in cart
   function calculateTotalPrice() {
-    return cart.reduce((total, item) => {
-      return total + item.price * item.quantity;
-    }, 0);
+    let totalNonPackage = 0;
+    let totalPackage = 0;
+
+    cart.forEach((item) => {
+      const subtotal = item.price * item.quantity;
+      if (item.isPackage) {
+        totalPackage += subtotal;
+      } else {
+        totalNonPackage += subtotal;
+      }
+    });
+
+    return {
+      totalNonPackage,
+      totalPackage,
+      grandTotal: totalNonPackage + totalPackage,
+    };
   }
 
   // Cart Page Functionality
@@ -142,12 +266,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const grandTotalElement = document.querySelector("#grand-total");
     const checkoutForm = document.getElementById("checkout-form");
 
-    console.log("Cart data:", cart); // Debugging line
-
     if (cart.length === 0) {
-      cartEmpty.style.display = "flex";
-      cartItems.style.display = "none";
-      return;
+        cartEmpty.style.display = "flex";
+        cartItems.style.display = "none";
+        return;
     }
 
     cartEmpty.style.display = "none";
@@ -156,136 +278,155 @@ document.addEventListener("DOMContentLoaded", function () {
     // Clear existing rows
     cartTableBody.innerHTML = "";
 
-    let totalPrice = 0;
+    // Calculate totals
+    const { totalNonPackage, totalPackage, grandTotal } = calculateTotalPrice();
+    const totalPrice = totalNonPackage + totalPackage;
+
+    // Hitung grand total dengan diskon hanya untuk non-paket
+    let discountAmount = 0;
+    let finalGrandTotal = grandTotal;
+
+    if (appliedDiscount > 0) {
+        discountAmount = (totalNonPackage * appliedDiscount) / 100;
+        finalGrandTotal = totalPackage + (totalNonPackage - discountAmount);
+    }
 
     // Add each item to the table
     cart.forEach((item, index) => {
-      const subtotal = item.price * item.quantity;
-      totalPrice += subtotal;
+        const subtotal = item.price * item.quantity;
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>
-          <div class="cart-item-info">
-            <div class="cart-item-img" style="background-image: url('https://via.placeholder.com/100/FFD700/A86523?text=${encodeURIComponent(
-              item.product.split(" ")[0]
-            )}')"></div>
-            <span class="cart-item-name">${item.product}</span>
-          </div>
-        </td>
-        <td>${item.sizeText || item.size}</td>
-        <td>${item.priceText || `Rp ${item.price.toLocaleString("id-ID")}`}</td>
-        <td>
-          <div class="quantity-control">
-            <button class="decrease-qty" data-index="${index}">-</button>
-            <input type="number" value="${
-              item.quantity
-            }" min="1" class="item-qty" data-index="${index}">
-            <button class="increase-qty" data-index="${index}">+</button>
-          </div>
-        </td>
-        <td>Rp ${subtotal.toLocaleString("id-ID")}</td>
-        <td><button class="remove-item" data-index="${index}"><i class="fas fa-trash"></i></button></td>
-      `;
-      cartTableBody.appendChild(row);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>
+                <div class="cart-item-info">
+                    <div class="cart-item-img" style="background-image: url('https://via.placeholder.com/100/FFD700/A86523?text=${encodeURIComponent(
+                        item.product.split(" ")[0]
+                    )}')"></div>
+                    <div>
+                        <span class="cart-item-name">${item.product}</span>
+                        ${
+                            item.isPackage ? '<span class="package-badge">Paket</span>' : ""
+                        }
+                        ${
+                            item.isPackage
+                                ? `<div class="package-contents"><small>${item.packageItems.join(
+                                    ", "
+                                )}</small></div>`
+                                : ""
+                        }
+                        ${
+                            item.isPackage
+                                ? `<div class="original-price-text"><small>Harga normal: Rp ${item.originalPrice.toLocaleString(
+                                    "id-ID"
+                                )}</small></div>`
+                                : ""
+                        }
+                    </div>
+                </div>
+            </td>
+            <td>${item.size}</td>
+            <td>${item.priceText || `Rp ${item.price.toLocaleString("id-ID")}`}</td>
+            <td>
+                <div class="quantity-control">
+                    <button class="decrease-qty" data-index="${index}">-</button>
+                    <input type="number" value="${
+                        item.quantity
+                    }" min="1" class="item-qty" data-index="${index}">
+                    <button class="increase-qty" data-index="${index}">+</button>
+                </div>
+            </td>
+            <td>Rp ${subtotal.toLocaleString("id-ID")}</td>
+            <td><button class="remove-item" data-index="${index}"><i class="fas fa-trash"></i></button></td>
+        `;
+        cartTableBody.appendChild(row);
     });
 
-    // Hitung grand total dengan diskon jika ada
-    let grandTotal = totalPrice;
-    if (appliedDiscount > 0) {
-      grandTotal = totalPrice - (totalPrice * appliedDiscount) / 100;
-    }
-
-    // Update totals
+    // Update tampilan
     totalPriceElement.textContent = `Rp ${totalPrice.toLocaleString("id-ID")}`;
-    grandTotalElement.textContent = `Rp ${grandTotal.toLocaleString("id-ID")}`;
+    grandTotalElement.textContent = `Rp ${finalGrandTotal.toLocaleString(
+        "id-ID"
+    )}`;
 
     const discountRow = document.getElementById("discount-row");
     const discountAmountEl = document.getElementById("discount-amount");
 
     if (discountRow && discountAmountEl) {
-      if (appliedDiscount > 0) {
-        discountRow.style.display = "flex";
-        const discountAmount = totalPrice - grandTotal;
-        discountAmountEl.textContent = `Rp ${discountAmount.toLocaleString(
-          "id-ID"
-        )}`;
-      } else {
-        discountRow.style.display = "none";
-      }
+        if (appliedDiscount > 0) {
+            discountRow.style.display = "flex";
+            discountAmountEl.textContent = `-Rp ${discountAmount.toLocaleString(
+                "id-ID"
+            )} (${appliedDiscount}% untuk non-paket)`;
+        } else {
+            discountRow.style.display = "none";
+        }
     }
 
+    // Rest of the function remains the same...
     // Prepare cart data for form submission
     document.querySelector("#cart-data-input").value = JSON.stringify(cart);
 
     // Quantity controls
     document.querySelectorAll(".decrease-qty").forEach((button) => {
-      button.addEventListener("click", function () {
-        const index = parseInt(this.getAttribute("data-index"));
-        if (cart[index].quantity > 1) {
-          cart[index].quantity -= 1;
-          saveAndRenderCart();
-        }
-      });
+        button.addEventListener("click", function () {
+            const index = parseInt(this.getAttribute("data-index"));
+            if (cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+                saveAndRenderCart();
+            }
+        });
     });
 
     document.querySelectorAll(".increase-qty").forEach((button) => {
-      button.addEventListener("click", function () {
-        const index = parseInt(this.getAttribute("data-index"));
-        cart[index].quantity += 1;
-        saveAndRenderCart();
-      });
+        button.addEventListener("click", function () {
+            const index = parseInt(this.getAttribute("data-index"));
+            cart[index].quantity += 1;
+            saveAndRenderCart();
+        });
     });
 
     document.querySelectorAll(".item-qty").forEach((input) => {
-      input.addEventListener("change", function () {
-        const index = parseInt(this.getAttribute("data-index"));
-        const newQty = parseInt(this.value);
-        if (newQty > 0) {
-          cart[index].quantity = newQty;
-          saveAndRenderCart();
-        } else {
-          this.value = cart[index].quantity;
-        }
-      });
+        input.addEventListener("change", function () {
+            const index = parseInt(this.getAttribute("data-index"));
+            const newQty = parseInt(this.value);
+            if (newQty > 0) {
+                cart[index].quantity = newQty;
+                saveAndRenderCart();
+            } else {
+                this.value = cart[index].quantity;
+            }
+        });
     });
 
     // Event delegation for delete buttons
     cartTableBody.addEventListener("click", function (e) {
-      if (e.target.closest(".remove-item")) {
-        const index = parseInt(
-          e.target.closest(".remove-item").getAttribute("data-index")
-        );
-        cart.splice(index, 1);
-        saveAndRenderCart();
-      }
+        if (e.target.closest(".remove-item")) {
+            const index = parseInt(
+                e.target.closest(".remove-item").getAttribute("data-index")
+            );
+            cart.splice(index, 1);
+            saveAndRenderCart();
+        }
     });
 
     // Form validation
     if (checkoutForm) {
-      checkoutForm.addEventListener("submit", function (e) {
-        const name = document.getElementById("name").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const address = document.getElementById("address").value.trim();
+        checkoutForm.addEventListener("submit", function (e) {
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const address = document.getElementById("address").value.trim();
 
-        if (!name || !phone || !address) {
-          e.preventDefault();
-          alert(
-            "Harap lengkapi semua informasi yang diperlukan (Nama, Nomor WhatsApp, dan Alamat)"
-          );
-        }
-      });
+            if (!name || !phone || !address) {
+                e.preventDefault();
+                alert(
+                    "Harap lengkapi semua informasi yang diperlukan (Nama, Nomor WhatsApp, dan Alamat)"
+                );
+            }
+        });
     }
 
     // Inisialisasi fitur kode redeem
     setupRedeemCode();
-  }
-
-  // Global state untuk diskon
-  let appliedDiscount =
-    parseInt(localStorage.getItem("snaxsnack_discount")) || 0;
-  const validRedeemCode = "SNACK10";
-  const discountPercentage = 10;
+}
 
   // Redeem code handler
   function setupRedeemCode() {
@@ -298,11 +439,11 @@ document.addEventListener("DOMContentLoaded", function () {
     applyRedeemButton.addEventListener("click", function () {
       const enteredCode = redeemInput.value.trim().toUpperCase();
 
-      if (enteredCode === validRedeemCode) {
-        appliedDiscount = discountPercentage;
+      if (enteredCode === "SNACK10") {
+        appliedDiscount = 10;
         localStorage.setItem("snaxsnack_discount", appliedDiscount);
         redeemMessage.style.color = "green";
-        redeemMessage.textContent = `Kode berhasil diterapkan! Diskon ${appliedDiscount}%`;
+        redeemMessage.textContent = `Kode berhasil diterapkan! Diskon ${appliedDiscount}% (hanya untuk produk non-paket)`;
       } else {
         appliedDiscount = 0;
         localStorage.removeItem("snaxsnack_discount");
@@ -311,11 +452,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (appliedDiscount > 0) {
-        redeemInput.value = validRedeemCode;
-        redeemMessage.style.color = "green";
-        redeemMessage.textContent = `Kode berhasil diterapkan! Diskon ${appliedDiscount}%`;
+        redeemInput.value = "SNACK10";
       }
-      renderCartPage(); // Re-render cart
+      renderCartPage();
     });
   }
 
@@ -553,16 +692,25 @@ document
     document.getElementById("loading-overlay").style.display = "flex";
 
     try {
-      // Format pesan WhatsApp langsung dari frontend
+      // Format pesan WhatsApp
       let whatsappMessage = " *FORM PEMESANAN SNACKSNACK* \n\n";
       whatsappMessage += "================================\n\n";
 
-      let total = 0;
-      cartData.forEach((item) => {
-        const subtotal = (item.price || 0) * (item.quantity || 1);
-        total += subtotal;
+      let totalNonPackage = 0;
+      let totalPackage = 0;
 
-        whatsappMessage += ` *${item.product || "Produk tidak diketahui"}*\n`;
+      cart.forEach((item) => {
+        const subtotal = (item.price || 0) * (item.quantity || 1);
+
+        if (item.isPackage) {
+          totalPackage += subtotal;
+        } else {
+          totalNonPackage += subtotal;
+        }
+
+        whatsappMessage += ` *${item.product || "Produk tidak diketahui"}*${
+          item.isPackage ? " (PAKET)" : ""
+        }\n`;
         whatsappMessage += `   - Ukuran: ${
           item.sizeText || item.size || "Ukuran tidak diketahui"
         }\n`;
@@ -576,28 +724,30 @@ document
       });
 
       whatsappMessage += "================================\n";
-
-      // Cek diskon
-      const appliedDiscount =
-        parseInt(localStorage.getItem("snaxsnack_discount")) || 0;
+      whatsappMessage += ` *Total Produk Non-Paket:* Rp ${totalNonPackage.toLocaleString(
+        "id-ID"
+      )}\n`;
+      whatsappMessage += ` *Total Produk Paket:* Rp ${totalPackage.toLocaleString(
+        "id-ID"
+      )}\n`;
 
       if (appliedDiscount > 0) {
-        const discountAmount = (total * appliedDiscount) / 100;
-        const totalAfterDiscount = total - discountAmount;
+        const discountAmount = (totalNonPackage * appliedDiscount) / 100;
+        const totalAfterDiscount = totalNonPackage - discountAmount;
 
-        whatsappMessage += ` *Total Sebelum Diskon:* Rp ${total.toLocaleString(
+        whatsappMessage += ` *Diskon (${appliedDiscount}% untuk non-paket):* -Rp ${discountAmount.toLocaleString(
           "id-ID"
         )}\n`;
-        whatsappMessage += ` *Diskon (${appliedDiscount}%):* -Rp ${discountAmount.toLocaleString(
+        whatsappMessage += ` *Total Setelah Diskon:* Rp ${totalAfterDiscount.toLocaleString(
           "id-ID"
         )}\n`;
-        whatsappMessage += ` *TOTAL PEMBAYARAN:* Rp ${totalAfterDiscount.toLocaleString(
-          "id-ID"
-        )}\n\n`;
+        whatsappMessage += ` *TOTAL PEMBAYARAN:* Rp ${(
+          totalPackage + totalAfterDiscount
+        ).toLocaleString("id-ID")}\n\n`;
       } else {
-        whatsappMessage += ` *TOTAL PEMBAYARAN:* Rp ${total.toLocaleString(
-          "id-ID"
-        )}\n\n`;
+        whatsappMessage += ` *TOTAL PEMBAYARAN:* Rp ${(
+          totalNonPackage + totalPackage
+        ).toLocaleString("id-ID")}\n\n`;
       }
 
       whatsappMessage += " *DATA PEMESAN*\n";
@@ -637,7 +787,7 @@ document
     }
   });
 
-// Order success notification (tetap sama)
+// Order success notification
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has("order") && urlParams.get("order") === "success") {
   const orderSuccess = document.createElement("div");
