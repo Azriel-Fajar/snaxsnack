@@ -439,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
     applyRedeemButton.addEventListener("click", function () {
       const enteredCode = redeemInput.value.trim().toUpperCase();
 
-      if (enteredCode === "SNACK10") {
+      if (enteredCode === "GACOR10") {
         appliedDiscount = 10;
         localStorage.setItem("snaxsnack_discount", appliedDiscount);
         redeemMessage.style.color = "green";
@@ -452,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (appliedDiscount > 0) {
-        redeemInput.value = "SNACK10";
+        redeemInput.value = "GACOR10";
       }
       renderCartPage();
     });
