@@ -96,6 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
       showAddToCartFeedback(button);
       return;
     }
+    // Special case for Paket Huhah - no flavor selection needed
+    if (productName === "Paket Cihuy") {
+      addToCart(productName, size, price, priceText, true, options);
+      showAddToCartFeedback(button);
+      return;
+    }
 
     // Rest of the modal code remains the same for other packages
     const modal = document.createElement("div");
@@ -260,6 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cart = JSON.parse(localStorage.getItem("snaxsnack_cart")) || [];
 
     const cartTableBody = document.querySelector("#cart-table-body");
+    const mobileCartItems = document.querySelector("#mobile-cart-items");
     const cartEmpty = document.querySelector("#cart-empty");
     const cartItems = document.querySelector("#cart-items");
     const totalPriceElement = document.querySelector("#total-price");
@@ -267,9 +274,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const checkoutForm = document.getElementById("checkout-form");
 
     if (cart.length === 0) {
-        cartEmpty.style.display = "flex";
-        cartItems.style.display = "none";
-        return;
+      cartEmpty.style.display = "flex";
+      cartItems.style.display = "none";
+      return;
     }
 
     cartEmpty.style.display = "none";
@@ -277,6 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Clear existing rows
     cartTableBody.innerHTML = "";
+    mobileCartItems.innerHTML = "";
 
     // Calculate totals
     const { totalNonPackage, totalPackage, grandTotal } = calculateTotalPrice();
@@ -287,146 +295,206 @@ document.addEventListener("DOMContentLoaded", function () {
     let finalGrandTotal = grandTotal;
 
     if (appliedDiscount > 0) {
-        discountAmount = (totalNonPackage * appliedDiscount) / 100;
-        finalGrandTotal = totalPackage + (totalNonPackage - discountAmount);
+      discountAmount = (totalNonPackage * appliedDiscount) / 100;
+      finalGrandTotal = totalPackage + (totalNonPackage - discountAmount);
     }
 
-    // Add each item to the table
+    // Add each item to the table (desktop)
     cart.forEach((item, index) => {
-        const subtotal = item.price * item.quantity;
+      const subtotal = item.price * item.quantity;
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>
-                <div class="cart-item-info">
-                    <div class="cart-item-img" style="background-image: url('https://via.placeholder.com/100/FFD700/A86523?text=${encodeURIComponent(
-                        item.product.split(" ")[0]
-                    )}')"></div>
-                    <div>
-                        <span class="cart-item-name">${item.product}</span>
-                        ${
-                            item.isPackage ? '<span class="package-badge">Paket</span>' : ""
-                        }
-                        ${
-                            item.isPackage
-                                ? `<div class="package-contents"><small>${item.packageItems.join(
-                                    ", "
-                                )}</small></div>`
-                                : ""
-                        }
-                        ${
-                            item.isPackage
-                                ? `<div class="original-price-text"><small>Harga normal: Rp ${item.originalPrice.toLocaleString(
-                                    "id-ID"
-                                )}</small></div>`
-                                : ""
-                        }
-                    </div>
-                </div>
-            </td>
-            <td>${item.size}</td>
-            <td>${item.priceText || `Rp ${item.price.toLocaleString("id-ID")}`}</td>
-            <td>
-                <div class="quantity-control">
-                    <button class="decrease-qty" data-index="${index}">-</button>
-                    <input type="number" value="${
-                        item.quantity
-                    }" min="1" class="item-qty" data-index="${index}">
-                    <button class="increase-qty" data-index="${index}">+</button>
-                </div>
-            </td>
-            <td>Rp ${subtotal.toLocaleString("id-ID")}</td>
-            <td><button class="remove-item" data-index="${index}"><i class="fas fa-trash"></i></button></td>
-        `;
-        cartTableBody.appendChild(row);
+      // Desktop table row
+      const row = document.createElement("tr");
+      row.innerHTML = `
+      <td>
+          <div class="cart-item-info">
+              <div class="cart-item-img" style="background-image: url('https://via.placeholder.com/100/FFD700/A86523?text=${encodeURIComponent(
+                item.product.split(" ")[0]
+              )}')"></div>
+              <div>
+                  <span class="cart-item-name">${item.product}</span>
+                  ${
+                    item.isPackage
+                      ? '<span class="package-badge">Paket</span>'
+                      : ""
+                  }
+                  ${
+                    item.isPackage
+                      ? `<div class="package-contents"><small>${item.packageItems.join(
+                          ", "
+                        )}</small></div>`
+                      : ""
+                  }
+                  ${
+                    item.isPackage
+                      ? `<div class="original-price-text"><small>Harga normal: Rp ${item.originalPrice.toLocaleString(
+                          "id-ID"
+                        )}</small></div>`
+                      : ""
+                  }
+              </div>
+          </div>
+      </td>
+      <td>${item.size}</td>
+      <td>${item.priceText || `Rp ${item.price.toLocaleString("id-ID")}`}</td>
+      <td>
+          <div class="quantity-control">
+              <button class="decrease-qty" data-index="${index}">-</button>
+              <input type="number" value="${
+                item.quantity
+              }" min="1" class="item-qty" data-index="${index}">
+              <button class="increase-qty" data-index="${index}">+</button>
+          </div>
+      </td>
+      <td>Rp ${subtotal.toLocaleString("id-ID")}</td>
+      <td><button class="remove-item" data-index="${index}"><i class="fas fa-trash"></i></button></td>
+    `;
+      cartTableBody.appendChild(row);
+
+      // Mobile cart item
+      const mobileItem = document.createElement("div");
+      mobileItem.className = "mobile-cart-item";
+      mobileItem.innerHTML = `
+      <div class="mobile-cart-item-header">
+        <div class="mobile-cart-item-name">${item.product} ${
+        item.isPackage ? '<span class="package-badge">Paket</span>' : ""
+      }</div>
+        <div class="mobile-cart-item-price">Rp ${item.price.toLocaleString(
+          "id-ID"
+        )}</div>
+      </div>
+      <div class="mobile-cart-item-details">
+        <div>Ukuran: ${item.size}</div>
+        ${
+          item.isPackage
+            ? `<div class="package-contents">Isi: ${item.packageItems.join(
+                ", "
+              )}</div>`
+            : ""
+        }
+        ${
+          item.isPackage
+            ? `<div class="original-price-text">Harga normal: Rp ${item.originalPrice.toLocaleString(
+                "id-ID"
+              )}</div>`
+            : ""
+        }
+      </div>
+      <div class="mobile-cart-item-footer">
+        <div class="mobile-cart-item-quantity">
+          <button class="decrease-qty" data-index="${index}">-</button>
+          <input type="number" value="${
+            item.quantity
+          }" min="1" class="item-qty" data-index="${index}">
+          <button class="increase-qty" data-index="${index}">+</button>
+        </div>
+        <div class="mobile-cart-item-subtotal">Rp ${subtotal.toLocaleString(
+          "id-ID"
+        )}</div>
+        <button class="mobile-cart-item-remove" data-index="${index}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `;
+      mobileCartItems.appendChild(mobileItem);
     });
 
     // Update tampilan
     totalPriceElement.textContent = `Rp ${totalPrice.toLocaleString("id-ID")}`;
     grandTotalElement.textContent = `Rp ${finalGrandTotal.toLocaleString(
-        "id-ID"
+      "id-ID"
     )}`;
 
     const discountRow = document.getElementById("discount-row");
     const discountAmountEl = document.getElementById("discount-amount");
 
     if (discountRow && discountAmountEl) {
-        if (appliedDiscount > 0) {
-            discountRow.style.display = "flex";
-            discountAmountEl.textContent = `-Rp ${discountAmount.toLocaleString(
-                "id-ID"
-            )} (${appliedDiscount}% untuk non-paket)`;
-        } else {
-            discountRow.style.display = "none";
-        }
+      if (appliedDiscount > 0) {
+        discountRow.style.display = "flex";
+        discountAmountEl.textContent = `-Rp ${discountAmount.toLocaleString(
+          "id-ID"
+        )} (${appliedDiscount}% untuk non-paket)`;
+      } else {
+        discountRow.style.display = "none";
+      }
     }
 
-    // Rest of the function remains the same...
     // Prepare cart data for form submission
     document.querySelector("#cart-data-input").value = JSON.stringify(cart);
 
     // Quantity controls
-    document.querySelectorAll(".decrease-qty").forEach((button) => {
+    function setupQuantityControls(container) {
+      container.querySelectorAll(".decrease-qty").forEach((button) => {
         button.addEventListener("click", function () {
-            const index = parseInt(this.getAttribute("data-index"));
-            if (cart[index].quantity > 1) {
-                cart[index].quantity -= 1;
-                saveAndRenderCart();
-            }
-        });
-    });
-
-    document.querySelectorAll(".increase-qty").forEach((button) => {
-        button.addEventListener("click", function () {
-            const index = parseInt(this.getAttribute("data-index"));
-            cart[index].quantity += 1;
+          const index = parseInt(this.getAttribute("data-index"));
+          if (cart[index].quantity > 1) {
+            cart[index].quantity -= 1;
             saveAndRenderCart();
+          }
         });
-    });
+      });
 
-    document.querySelectorAll(".item-qty").forEach((input) => {
-        input.addEventListener("change", function () {
-            const index = parseInt(this.getAttribute("data-index"));
-            const newQty = parseInt(this.value);
-            if (newQty > 0) {
-                cart[index].quantity = newQty;
-                saveAndRenderCart();
-            } else {
-                this.value = cart[index].quantity;
-            }
+      container.querySelectorAll(".increase-qty").forEach((button) => {
+        button.addEventListener("click", function () {
+          const index = parseInt(this.getAttribute("data-index"));
+          cart[index].quantity += 1;
+          saveAndRenderCart();
         });
-    });
+      });
+
+      container.querySelectorAll(".item-qty").forEach((input) => {
+        input.addEventListener("change", function () {
+          const index = parseInt(this.getAttribute("data-index"));
+          const newQty = parseInt(this.value);
+          if (newQty > 0) {
+            cart[index].quantity = newQty;
+            saveAndRenderCart();
+          } else {
+            this.value = cart[index].quantity;
+          }
+        });
+      });
+    }
+
+    // Setup controls for both desktop and mobile
+    setupQuantityControls(document);
 
     // Event delegation for delete buttons
-    cartTableBody.addEventListener("click", function (e) {
-        if (e.target.closest(".remove-item")) {
-            const index = parseInt(
-                e.target.closest(".remove-item").getAttribute("data-index")
-            );
-            cart.splice(index, 1);
-            saveAndRenderCart();
-        }
+    document.addEventListener("click", function (e) {
+      if (
+        e.target.closest(".remove-item") ||
+        e.target.closest(".mobile-cart-item-remove")
+      ) {
+        const index = parseInt(
+          (
+            e.target.closest(".remove-item") ||
+            e.target.closest(".mobile-cart-item-remove")
+          ).getAttribute("data-index")
+        );
+        cart.splice(index, 1);
+        saveAndRenderCart();
+      }
     });
 
     // Form validation
     if (checkoutForm) {
-        checkoutForm.addEventListener("submit", function (e) {
-            const name = document.getElementById("name").value.trim();
-            const phone = document.getElementById("phone").value.trim();
-            const address = document.getElementById("address").value.trim();
+      checkoutForm.addEventListener("submit", function (e) {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const address = document.getElementById("address").value.trim();
 
-            if (!name || !phone || !address) {
-                e.preventDefault();
-                alert(
-                    "Harap lengkapi semua informasi yang diperlukan (Nama, Nomor WhatsApp, dan Alamat)"
-                );
-            }
-        });
+        if (!name || !phone || !address) {
+          e.preventDefault();
+          alert(
+            "Harap lengkapi semua informasi yang diperlukan (Nama, Nomor WhatsApp, dan Alamat)"
+          );
+        }
+      });
     }
 
     // Inisialisasi fitur kode redeem
     setupRedeemCode();
-}
+  }
 
   // Redeem code handler
   function setupRedeemCode() {
