@@ -761,7 +761,7 @@ document
 
       // Encode untuk URL WhatsApp
       const encodedMessage = encodeURIComponent(whatsappMessage);
-      const whatsappUrl = `https://wa.me/6281295536876?text=${encodedMessage}`;
+      const whatsappUrl = `https://wa.me/6285669522225?text=${encodedMessage}`;
 
       // Kosongkan keranjang dan diskon
       localStorage.removeItem("snaxsnack_cart");
