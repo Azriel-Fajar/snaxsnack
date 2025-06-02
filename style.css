@@ -1477,6 +1477,14 @@ footer {
     padding: 120px 0 20px;
   }
   
+  .cart-icon.mobile-cart {
+    display: block;
+  }
+
+  .cart-icon.desktop-cart {
+    display: none;
+  }
+  
   .cart-items table {
     display: none;
   }
